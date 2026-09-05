@@ -390,7 +390,7 @@ independientemente del tamaño de la pantalla.
 ### 1. Clonar el repositorio
 
 ```bash
-git clone 202602-Ingenieria-Web-Udea/taller-html-Bryan-Giraldo-Quintero
+git clone 202602-Ingeniria-Web-Udea/taller-html-Bryan-Giraldo-Quintero
 ```
 
 ### 2. Acceder al proyecto
