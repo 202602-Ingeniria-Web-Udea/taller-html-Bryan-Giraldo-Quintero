@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+<!-- Permite que la aplicación se adapte correctamente a móviles -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PokéTeam | Explora Pokémon</title>
+
+<!-- Hoja de estilos principal -->
+<link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+     Contiene el nombre de la aplicación y acceso a Mi Equipo
+     ===================================================== -->
+<header class="header">
+
+    <div class="header__content">
+
+        <div class="header__brand">
+            <span class="header__icon">⚡</span>
+
+            <div>
+                <h1 class="header__title">PokéTeam</h1>
+
+                <p class="header__subtitle">
+                    Explora, descubre y crea tu propio equipo Pokémon
+                </p>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="header__team-button"
+            id="teamButton"
+        >
+            <span>Mi Equipo</span>
+            <span id="teamCounter">0/6</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+     ===================================================== -->
+<main class="main">
+
+    <!-- =================================================
+         BUSCADOR
+         ================================================= -->
+    <section class="search-section">
+
+        <div class="search-box">
+
+            <label
+                class="search-box__label"
+                for="searchInput"
+            >
+                Buscar Pokémon
+            </label>
+
+            <div class="search-box__container">
+
+<div class="search-box__container">
+
+    <input
+        type="text"
+        id="searchInput"
+        class="search-box__input"
+        placeholder="Escribe el nombre de un Pokémon..."
+        autocomplete="off"
+    >
+
+    <button
+        type="button"
+        id="clearSearchButton"
+        class="search-box__clear"
+        aria-label="Limpiar búsqueda"
+    >
+        ✕
+    </button>
+
+</div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         LISTADO DE POKÉMON
+         ================================================= -->
+    <section class="pokemon-section">
+
+        <div class="section-header">
+
+            <div>
+                <h2 class="section-title">
+                    Todos los Pokémon
+                </h2>
+
+                <p
+                    class="section-description"
+                    id="resultsCounter"
+                >
+                    Cargando Pokémon...
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Mensaje de carga -->
+        <div
+            id="loadingMessage"
+            class="status-message"
+        >
+            <span
+            class="loading-spinner"
+            aria-hidden="true"
+            >⏳</span>
+
+            <div class="status-message__content">
+
+                <strong>
+                    Cargando Pokémon...
+                </strong>
+            <p id="loadingText">
+                Estamos preparando tus resultados...
+            </p>
+            </div>
+        </div>
+
+
+        <!-- Mensaje de error -->
+        <div
+            id="errorMessage"
+            class="status-message status-message--error hidden"
+        >
+            <span class="status-message__icon"
+            aria-hidden="true"
+            >⚠️
+            </span>
+
+            <div class="status-message__content">
+
+                <strong id ="errorTitle">
+                    No fue posible cargar Pokémon
+                </strong>
+                
+            
+            <p id="errorText">
+                Comprueba tu conexión e intenta nuevamente.
+            </p>
+        </div>
+        
+        <button
+            type="button"
+            id="retryButton"
+            class="retry-button"
+        >
+            ↻ Reintentar
+        </button>
+        </div>
+        <!-- Mensaje cuando no existen resultados -->
+        <div
+            id="emptyMessage"
+            class="status-message hidden"
+        >
+            <span class="status-message__icon">🔍</span>
+
+            <p>
+                No encontramos Pokémon que coincidan con tu búsqueda.
+            </p>
+        </div>
+
+
+        <!--
+            JavaScript insertará dinámicamente las tarjetas
+            de los Pokémon dentro de este contenedor.
+        -->
+        <div
+            id="pokemonGrid"
+            class="pokemon-grid"
+        >
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         PAGINACIÓN
+         ================================================= -->
+    <nav
+        class="pagination"
+        id="pagination"
+        aria-label="Paginación de Pokémon"
+    >
+
+        <button
+            type="button"
+            id="previousButton"
+            class="pagination__button"
+        >
+            ← Anterior
+        </button>
+
+        <span
+            id="pageIndicator"
+            class="pagination__indicator"
+        >
+            Página 1
+        </span>
+
+        <button
+            type="button"
+            id="nextButton"
+            class="pagination__button"
+        >
+            Siguiente →
+        </button>
+
+    </nav>
+
+</main>
+
+
+<!-- =====================================================
+     PANEL / MODAL DE MI EQUIPO
+     ===================================================== -->
+
+<div
+    id="teamOverlay"
+    class="team-overlay hidden"
+></div>
+
+<section
+    id="teamSection"
+    class="team-section hidden"
+>
+
+    <div class="team-section__header">
+
+        <div>
+            <h2 class="team-section__title">
+                ⚡ Mi Equipo
+            </h2>
+
+            <p id="teamDescription">
+                Tu equipo puede tener hasta 6 Pokémon.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="closeTeamButton"
+            class="team-section__close"
+            aria-label="Cerrar Mi Equipo"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <!--
+        Aquí JavaScript generará los Pokémon
+        que pertenezcan al equipo.
+    -->
+    <div
+        id="teamGrid"
+        class="team-grid"
+    >
+    </div>
+
+
+    <!-- Estado cuando el equipo está vacío -->
+    <div
+        id="emptyTeamMessage"
+        class="status-message"
+    >
+        <span class="status-message__icon">🎯</span>
+
+        <p>
+            Tu equipo está vacío.
+            ¡Agrega hasta 6 Pokémon!
+        </p>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MODAL DE DETALLES
+     ===================================================== -->
+<div
+    id="pokemonModal"
+    class="modal hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalPokemonName"
+>
+
+    <div class="modal__overlay" id="modalOverlay"></div>
+
+    <div class="modal__content">
+
+        <button
+            type="button"
+            id="closeModalButton"
+            class="modal__close"
+            aria-label="Cerrar detalles"
+        >
+            ✕
+        </button>
+
+        <!--
+            JavaScript llenará esta información
+            cuando seleccionemos un Pokémon.
+        -->
+        <div id="modalBody"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+<script src="js/app.js"></script>
+```
+
+</body>
+</html>
